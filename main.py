@@ -44,7 +44,3 @@ class OzonParser():
         pgsource.save_data(product_data, "products_data.json")
 
         return product_data
- 
-
-if __name__ == "__main__":
-    print(OzonParser(URL, PAGE_QT).get_product_data())

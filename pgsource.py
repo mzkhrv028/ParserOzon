@@ -108,10 +108,3 @@ def get_cardproduct_data(url: str, page_source: str = None, is_save: bool = Fals
     if only_link:
         return links
     return cards_product
-
-
-if __name__ == "__main__":
-    URL = "https://www.ozon.ru/product/smartfon-infinix-hot-20i-4-128-gb-chernyy-733545688/?asb=BRGAiUU784Bhhd5UUlRT7hcjKBTjBQ9gF0Kyv9aYW%252FQ%253D&asb2=lr_w3YwNFCCA75ENro_EhsTzJNTKwfz49RQ5qC-MrpIgAQLGZOKvceMzo-dmFuQP&avtc=1&avte=4&avts=1670743754&sh=vtLMPAN33w"
-    page_source = get_page_source(url=URL)
-    save_page_source(page_source)
-    # get_cardproduct_data(URL, is_save=True)
