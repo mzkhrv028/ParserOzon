@@ -30,10 +30,8 @@ class OzonParser():
         try:
             product_data = dict()
             for link in product_links:
-                print(link)
                 driver.get(link)
                 page_source = driver.page_source
-                print(page_source)
                 product_data[link] = pgsource.get_cardproduct_data(link, page_source)
         except Exception as ex:
             print(ex)

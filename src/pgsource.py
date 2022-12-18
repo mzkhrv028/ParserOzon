@@ -4,7 +4,7 @@ from pathlib import Path
 from selenium import webdriver
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0"
-OUTPATH_DATA = Path(Path.cwd(), "data")
+OUTPATH_DATA = Path(Path.cwd().parent, "data")
 OUTPUT_FILENAME_SOURCE = OUTPATH_DATA / "page_source.txt"
 
 
