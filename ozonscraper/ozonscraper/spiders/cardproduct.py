@@ -3,16 +3,23 @@ import re
 import json
 from scrapy.http import Request
 from scrapy.http import Response
+from ozonscraper.items import CardproductItem
 
 
 class CardproductSpider(scrapy.Spider):
     name = 'cardproduct'
     allowed_domains = ['www.ozon.ru']
+    categories = {
+        "smartphone": "smartfony-15502",
+        "laptop": "noutbuki-15692",
+        "tablets": "planshety-15525",
+        "tv": "televizory-15528",
+    }
     start_urls = ['https://www.ozon.ru/category/smartfony-15502/']
 
     custom_settings = {
         "FEEDS": {
-            'data/%(name)s/%(name)s_%(time)s.json': {
+            'data/%(name)s/smartphone/%(time)s.json': {
                 'format': 'json',
                 'encoding': 'utf8',
                 'fields': None,
@@ -36,12 +43,11 @@ class CardproductSpider(scrapy.Spider):
 
     def parse(self, response: Response):
         cardproduct_data = self._handle_data(response.text)
-        cardproduct_dict = dict()
 
         for cardproduct_value in cardproduct_data["state"]["trackingPayloads"].values():
             if isinstance(cardproduct_value, dict) and cardproduct_value.get("type") == "product":
-                cardproduct_dict[cardproduct_value['link']] = cardproduct_value
-                yield cardproduct_value # Изменить код.
+                cardproduct = {key: cardproduct_value.get(key) for key in CardproductItem.__match_args__}
+                yield CardproductItem(**cardproduct)
 
     @staticmethod
     def _handle_data(data: str) -> dict:

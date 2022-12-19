@@ -1,6 +1,15 @@
-# import scrapy
-# from dataclasses import dataclass
+from dataclasses import dataclass
 
-
-# class CardproductItem(scrapy.Item):
-#     data = scrapy.Field()
+# Сделать сортировку
+@dataclass
+class CardproductItem():
+    id: int
+    title: str
+    brandName: str
+    finalPrice: int
+    rating: float
+    discount: int
+    price: int
+    deliveryTimeDiffDays: int
+    index: int
+    link: int
