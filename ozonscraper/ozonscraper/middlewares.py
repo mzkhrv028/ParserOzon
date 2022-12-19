@@ -1,30 +1,43 @@
+from typing import Type, TypeVar
+
 from scrapy import signals
 from scrapy.http import HtmlResponse
+from scrapy.crawler import Crawler
+from scrapy.http.request import Request
+from scrapy.spiders import Spider
 from selenium import webdriver
 
+SeleniumDownloaderMiddlewareTV = TypeVar("SeleniumDownloaderMiddlewareTV", bound="SeleniumDownloaderMiddleware")
 
 class SeleniumDownloaderMiddleware:
-    def __init__(self, user_agent) -> None:
+    def __init__(self, user_agent: str) -> None:
         self.user_agent = user_agent
-        self.driver = webdriver.Firefox(options=self._set_options_driver())
 
     @classmethod
-    def from_crawler(cls, crawler):
-        user_agent = crawler.settings['USER_AGENT']
-        return cls(user_agent)
+    def from_crawler(cls: Type[SeleniumDownloaderMiddlewareTV], crawler: Crawler) -> SeleniumDownloaderMiddlewareTV:
+        c = cls(crawler.settings['USER_AGENT'])
+        crawler.signals.connect(c.spider_opened, signal=signals.spider_opened)
+        crawler.signals.connect(c.spider_closed, signal=signals.spider_closed)
+        return c
 
-    def process_request(self, request, spider) -> HtmlResponse:
+    def process_request(self, request: Request, spider: Spider) -> HtmlResponse:
         try:
             self.driver.get(request.url) 
             page_source = self.driver.page_source
         except Exception as ex:
-            print(ex)
-        finally:
             self.driver.close()
             self.driver.quit()
+            print(ex)
 
         return HtmlResponse(request.url, encoding="utf-8", body=page_source)
 
+    def spider_opened(self) -> None:
+        self.driver = webdriver.Firefox(options=self._set_options_driver())
+
+    def spider_closed(self) -> None:
+        self.driver.close()
+        self.driver.quit()
+    
     def _set_options_driver(self) -> webdriver.FirefoxOptions:
         options = webdriver.FirefoxOptions()
         options.add_argument("--disable-blink-features=AutomationControlled")

@@ -1,6 +1,10 @@
 __pycache__/
 
+.scrapy/
 .venv
 .vscode
+
+src/
+data/
 
 geckodriver.log
