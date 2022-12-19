@@ -43,12 +43,15 @@ DEFAULT_REQUEST_HEADERS = {
     "Accept": "application/json",
     "Accept-Language": "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3",
     "Accept-Encoding": "gzip, deflate, br",
+    "Referer": "https://www.ozon.ru/",
     "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "empty",
-    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "same-origin",
     "Sec-Fetch-User": "?1",
     "Connection": "keep-alive",
+    "Alt-Used": "www.ozon.ru",
+    "TE": "Trailers",
 }
 
 # Enable or disable spider middlewares
@@ -101,3 +104,5 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
 
 LOG_LEVEL = "INFO"
+
+# OUTPATH_DATA = "data/"

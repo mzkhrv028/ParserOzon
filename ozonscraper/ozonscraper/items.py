@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 # Сделать сортировку
 @dataclass
-class CardproductItem():
+class CardproductItem:
     id: int
     title: str
     brandName: str

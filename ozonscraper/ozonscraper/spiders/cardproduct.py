@@ -4,6 +4,7 @@ import json
 from scrapy.http import Request
 from scrapy.http import Response
 from ozonscraper.items import CardproductItem
+from ozonscraper.extensions import SortingOutputFile
 
 
 class CardproductSpider(scrapy.Spider):
@@ -18,6 +19,9 @@ class CardproductSpider(scrapy.Spider):
     start_urls = ['https://www.ozon.ru/category/smartfony-15502/']
 
     custom_settings = {
+        # "EXTENSIONS": {
+        #     'ozonscraper.extensions.SortingOutputFile': 0,
+        # },
         "FEEDS": {
             'data/%(name)s/smartphone/%(time)s.json': {
                 'format': 'json',
@@ -32,9 +36,11 @@ class CardproductSpider(scrapy.Spider):
         }
     }
 
-    def __init__(self, page: str = 1, name: str = None, **kwargs):
+    def __init__(self, page: str = 1, category: str = None, mode: str = None, name: str = None, **kwargs):
         super(CardproductSpider, self).__init__(name, **kwargs)
         self.page = int(page)
+        self.mode = mode
+        self.category = category
 
     def start_requests(self):
         for url in self.start_urls:
@@ -46,8 +52,11 @@ class CardproductSpider(scrapy.Spider):
 
         for cardproduct_value in cardproduct_data["state"]["trackingPayloads"].values():
             if isinstance(cardproduct_value, dict) and cardproduct_value.get("type") == "product":
-                cardproduct = {key: cardproduct_value.get(key) for key in CardproductItem.__match_args__}
-                yield CardproductItem(**cardproduct)
+                if self.mode == "full":
+                    cardproduct = cardproduct_value
+                else:
+                    cardproduct = {key: cardproduct_value.get(key) for key in CardproductItem.__match_args__}
+                yield cardproduct
 
     @staticmethod
     def _handle_data(data: str) -> dict:
