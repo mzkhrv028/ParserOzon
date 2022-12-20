@@ -1,5 +1,4 @@
 from typing import Type, TypeVar
-
 from scrapy import signals
 from scrapy.http import HtmlResponse
 from scrapy.crawler import Crawler
@@ -8,6 +7,7 @@ from scrapy.spiders import Spider
 from selenium import webdriver
 
 SeleniumDownloaderMiddlewareTV = TypeVar("SeleniumDownloaderMiddlewareTV", bound="SeleniumDownloaderMiddleware")
+
 
 class SeleniumDownloaderMiddleware:
     def __init__(self, user_agent: str) -> None:

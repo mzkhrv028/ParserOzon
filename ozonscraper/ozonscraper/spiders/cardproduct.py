@@ -4,7 +4,6 @@ import json
 from scrapy.http import Request
 from scrapy.http import Response
 from ozonscraper.items import CardproductItem
-from ozonscraper.extensions import SortingOutputFile
 
 
 class CardproductSpider(scrapy.Spider):
@@ -16,38 +15,26 @@ class CardproductSpider(scrapy.Spider):
         "tablets": "planshety-15525",
         "tv": "televizory-15528",
     }
-    start_urls = ['https://www.ozon.ru/category/smartfony-15502/']
 
     custom_settings = {
-        # "EXTENSIONS": {
-        #     'ozonscraper.extensions.SortingOutputFile': 0,
-        # },
-        "FEEDS": {
-            'data/%(name)s/smartphone/%(time)s.json': {
-                'format': 'json',
-                'encoding': 'utf8',
-                'fields': None,
-                'store_empty': False,
-                'indent': 4,
-                'item_export_kwargs': {
-                'export_empty_fields': True,
-                },
-            },
+        "ITEM_PIPELINES": {
+            'ozonscraper.pipelines.JsonWriterPipeline': 300,
         }
     }
 
-    def __init__(self, page: str = 1, category: str = None, mode: str = None, name: str = None, **kwargs):
-        super(CardproductSpider, self).__init__(name, **kwargs)
+    def __init__(self, page: str = 1, category: str = None, mode: str = None, name: str = None, **kwargs) -> None:
+        super(CardproductSpider, self).__init__(name, category=category, **kwargs)
         self.page = int(page)
         self.mode = mode
         self.category = category
 
-    def start_requests(self):
-        for url in self.start_urls:
+    def start_requests(self) -> Request:
+        start_urls = [f'https://www.ozon.ru/category/{self.categories[self.category]}/']
+        for url in start_urls:
             for page in range(1, self.page + 1):
                     yield Request(url + f"?page={page}" if page > 1 else url, dont_filter=True)
 
-    def parse(self, response: Response):
+    def parse(self, response: Response) -> dict:
         cardproduct_data = self._handle_data(response.text)
 
         for cardproduct_value in cardproduct_data["state"]["trackingPayloads"].values():
@@ -68,7 +55,7 @@ class CardproductSpider(scrapy.Spider):
             print("[Error] Unsuccessfully handled")
             return match
 
-        data = json.loads(data
+        return json.loads(data
             .replace(r'\n', '')
             .replace(r'\\', '\\')
             .replace(r'\"', '"')
@@ -76,5 +63,3 @@ class CardproductSpider(scrapy.Spider):
             .replace('"{', '{')
             .replace('}"', '}')
         )
-
-        return data

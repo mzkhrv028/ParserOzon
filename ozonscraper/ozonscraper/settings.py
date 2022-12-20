@@ -1,11 +1,4 @@
-# Scrapy settings for ozonscraper project
-#
-# For simplicity, this file contains only settings considered important or
-# commonly used. You can find more settings consulting the documentation:
-#
-#     https://docs.scrapy.org/en/latest/topics/settings.html
-#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from pathlib import Path
 
 BOT_NAME = 'ozonscraper'
 
@@ -103,6 +96,6 @@ DOWNLOADER_MIDDLEWARES = {
 REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
 
-LOG_LEVEL = "INFO"
+LOG_LEVEL = 'INFO'
 
-# OUTPATH_DATA = "data/"
+OUTPATH_DATA = Path.cwd() / 'data'
