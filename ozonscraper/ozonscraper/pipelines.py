@@ -8,7 +8,7 @@ from scrapy.item import Item
 from itemadapter import ItemAdapter
 from scrapy.utils.python import to_bytes
 
-JsonWriterPipelineTV = TypeVar("JsonWriterPipelineTV", bound="JsonWriterPipeline")
+JsonWriterPipelineTV = TypeVar('JsonWriterPipelineTV', bound='JsonWriterPipeline')
 
 
 class JsonWriterPipeline:
@@ -18,7 +18,7 @@ class JsonWriterPipeline:
 
     @classmethod
     def from_crawler(cls, crawler: Crawler) -> JsonWriterPipelineTV:
-        return cls(crawler.settings.get("OUTPATH_DATA"))
+        return cls(crawler.settings.get('OUTPATH_DATA'))
 
     def open_spider(self, spider: Spider) -> None:
         outpath_data = self._handle_outpath(self.outpath_data / spider.name / spider.category)

@@ -6,7 +6,7 @@ from scrapy.http.request import Request
 from scrapy.spiders import Spider
 from selenium import webdriver
 
-SeleniumDownloaderMiddlewareTV = TypeVar("SeleniumDownloaderMiddlewareTV", bound="SeleniumDownloaderMiddleware")
+SeleniumDownloaderMiddlewareTV = TypeVar('SeleniumDownloaderMiddlewareTV', bound='SeleniumDownloaderMiddleware')
 
 
 class SeleniumDownloaderMiddleware:
@@ -29,7 +29,7 @@ class SeleniumDownloaderMiddleware:
             self.driver.quit()
             print(ex)
 
-        return HtmlResponse(request.url, encoding="utf-8", body=page_source)
+        return HtmlResponse(request.url, encoding='utf-8', body=page_source)
 
     def spider_opened(self) -> None:
         self.driver = webdriver.Firefox(options=self._set_options_driver())
@@ -40,10 +40,10 @@ class SeleniumDownloaderMiddleware:
     
     def _set_options_driver(self) -> webdriver.FirefoxOptions:
         options = webdriver.FirefoxOptions()
-        options.add_argument("--disable-blink-features=AutomationControlled")
-        options.add_argument(f"--user-agent={self.user_agent}")
-        options.add_argument("--start-maximized")
-        options.add_argument("--headless")
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument(f'--user-agent={self.user_agent}')
+        options.add_argument('--start-maximized')
+        options.add_argument('--headless')
         return options
 
 

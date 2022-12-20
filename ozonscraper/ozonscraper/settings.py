@@ -31,20 +31,20 @@ ROBOTSTXT_OBEY = False
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-    "Host": "www.ozon.ru",
-    "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:108.0) Gecko/20100101 Firefox/108.0",
-    "Accept": "application/json",
-    "Accept-Language": "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Referer": "https://www.ozon.ru/",
-    "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "same-origin",
-    "Sec-Fetch-User": "?1",
-    "Connection": "keep-alive",
-    "Alt-Used": "www.ozon.ru",
-    "TE": "Trailers",
+    'Host': 'www.ozon.ru',
+    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:108.0) Gecko/20100101 Firefox/108.0',
+    'Accept': 'application/json',
+    'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Referer': 'https://www.ozon.ru/',
+    'Upgrade-Insecure-Requests': '1',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'same-origin',
+    'Sec-Fetch-User':'"?1',
+    'Connection': 'keep-alive',
+    'Alt-Used': 'www.ozon.ru',
+    'TE': 'Trailers',
 }
 
 # Enable or disable spider middlewares
