@@ -2,7 +2,7 @@ import scrapy
 import re
 import json
 from scrapy.http import Request
-from scrapy.http import Response
+from scrapy.http import HtmlResponse
 from ozonscraper.items import CardproductItem
 
 
@@ -34,9 +34,8 @@ class CardproductSpider(scrapy.Spider):
             for page in range(1, self.page + 1):
                     yield Request(url + f'?page={page}' if page > 1 else url, dont_filter=True)
 
-    def parse(self, response: Response) -> dict:
+    def parse(self, response: HtmlResponse) -> dict:
         cardproduct_data = self._handle_data(response.text)
-
         for cardproduct_value in cardproduct_data['state']['trackingPayloads'].values():
             if isinstance(cardproduct_value, dict) and cardproduct_value.get('type') == 'product':
                 if self.mode == "full":
@@ -47,14 +46,12 @@ class CardproductSpider(scrapy.Spider):
 
     @staticmethod
     def _handle_data(data: str) -> dict:
-        match = re.search(r"(?<=window\.__NUXT__=JSON.parse\(\').+}(?=\')", data, flags=re.DOTALL)
-
+        match = re.search(r"(?<=window\.__NUXT__=JSON.parse\(\'){.*?}(?=\')", data, flags=re.DOTALL)
         if match:
             data = match.group()
         else:
             print('[Error] Unsuccessfully handled')
             return match
-
         return json.loads(data
             .replace(r'\n', '')
             .replace(r'\\', '\\')

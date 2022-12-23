@@ -1,13 +1,22 @@
 from pathlib import Path
+import random
 
 BOT_NAME = 'ozonscraper'
 
 SPIDER_MODULES = ['ozonscraper.spiders']
 NEWSPIDER_MODULE = 'ozonscraper.spiders'
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:108.0) Gecko/20100101 Firefox/108.0'
+USER_AGENT_LIST = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+    'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+    'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+    'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+    'Mozilla/5.0 (X11; Linux i686; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+    'Mozilla/5.0 (X11; Linux x86_64; rv:VERSION.0) Gecko/20100101 Firefox/VERSION.0',
+]
+USER_AGENT = random.choice(USER_AGENT_LIST).replace("VERSION", str(random.randint(102, 108)))
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -27,13 +36,13 @@ ROBOTSTXT_OBEY = False
 #COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
     'Host': 'www.ozon.ru',
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:108.0) Gecko/20100101 Firefox/108.0',
-    'Accept': 'application/json',
+    'User-Agent': USER_AGENT,
+    'Accept': 'tml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
     'Accept-Encoding': 'gzip, deflate, br',
     'Referer': 'https://www.ozon.ru/',
@@ -56,7 +65,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'ozonscraper.middlewares.SeleniumDownloaderMiddleware': 501,
+   'ozonscraper.middlewares.SeleniumMiddleware': 501,
 }
 
 # Enable or disable extensions

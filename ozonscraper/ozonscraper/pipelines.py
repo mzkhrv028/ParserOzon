@@ -6,7 +6,6 @@ from scrapy.spiders import Spider
 from scrapy.crawler import Crawler
 from scrapy.item import Item
 from itemadapter import ItemAdapter
-from scrapy.utils.python import to_bytes
 
 JsonWriterPipelineTV = TypeVar('JsonWriterPipelineTV', bound='JsonWriterPipeline')
 

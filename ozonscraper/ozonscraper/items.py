@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-# Сделать сортировку
+
 @dataclass
 class CardproductItem:
     id: int
@@ -11,5 +11,13 @@ class CardproductItem:
     discount: int
     price: int
     deliveryTimeDiffDays: int
+    countItems: int
     index: int
     link: int
+
+
+@dataclass
+class ProductItem:
+    link: str = field(default=None)
+    productTitle: str = field(default=None)
+    characteristics: dict = field(default_factory=dict)
