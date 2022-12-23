@@ -1,6 +1,7 @@
 import scrapy
 import re
 import json
+
 from scrapy.http import Request
 from scrapy.http import HtmlResponse
 from ozonscraper.items import CardproductItem
@@ -15,18 +16,29 @@ class CardproductSpider(scrapy.Spider):
         'tablets': 'planshety-15525',
         'tv': 'televizory-15528',
     }
-
     custom_settings = {
         'ITEM_PIPELINES': {
             'ozonscraper.pipelines.JsonWriterPipeline': 300,
         }
     }
 
-    def __init__(self, page: str = 1, category: str = 'smartphone', mode: str = None, name: str = None, **kwargs) -> None:
+    def __init__(self, page: str = '1', category: str = 'smartphone', mode: str = None, name: str = None, **kwargs) -> None:
         super(CardproductSpider, self).__init__(name, category=category, **kwargs)
-        self.page = int(page)
-        self.mode = mode
-        self.category = category
+        
+        try:
+            self.page = int(page)
+        except ValueError:
+            raise ValueError(f'page must be an integer, not {page}')
+
+        if mode == 'full':    
+            self.mode = True
+        else:
+            self.mode = False
+
+        if category not in CardproductSpider.categories:
+            raise ValueError(f'category must be from CardproductSpider.categories, not {category}')
+        else:
+            self.category = category
 
     def start_requests(self) -> Request:
         start_urls = [f'https://www.ozon.ru/category/{self.categories[self.category]}/']
@@ -38,7 +50,7 @@ class CardproductSpider(scrapy.Spider):
         cardproduct_data = self._handle_data(response.text)
         for cardproduct_value in cardproduct_data['state']['trackingPayloads'].values():
             if isinstance(cardproduct_value, dict) and cardproduct_value.get('type') == 'product':
-                if self.mode == "full":
+                if self.mode:
                     cardproduct = cardproduct_value
                 else:
                     cardproduct = {key: cardproduct_value.get(key) for key in CardproductItem.__match_args__}

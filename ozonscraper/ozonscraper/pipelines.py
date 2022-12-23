@@ -2,10 +2,12 @@ import json
 import time
 from pathlib import Path
 from typing import TypeVar
+from itemadapter import ItemAdapter
+
 from scrapy.spiders import Spider
 from scrapy.crawler import Crawler
 from scrapy.item import Item
-from itemadapter import ItemAdapter
+
 
 JsonWriterPipelineTV = TypeVar('JsonWriterPipelineTV', bound='JsonWriterPipeline')
 
@@ -20,7 +22,7 @@ class JsonWriterPipeline:
         return cls(crawler.settings.get('OUTPATH_DATA'))
 
     def open_spider(self, spider: Spider) -> None:
-        outpath_data = self._handle_outpath(self.outpath_data / spider.name / spider.category)
+        outpath_data = self._handle_outpath(self.outpath_data / spider.name / spider.category, spider)
         self.file = open(f'{outpath_data}/{time.strftime("%Y-%m-%dT%H-%M-%S", time.gmtime())}.json', 'w')
         self.file.write('[\n')
 
@@ -37,8 +39,9 @@ class JsonWriterPipeline:
         self.file.close()
         
     @staticmethod
-    def _handle_outpath(outpath: Path) -> Path:
+    def _handle_outpath(outpath: Path, spider: Spider) -> Path:
         if not Path.exists(outpath):
+            spider.logger.info(f'Create a directory \'{outpath}\'')
             Path.mkdir(outpath, parents=True)
         if not Path.is_dir(outpath):
             raise NotADirectoryError(f"[Error] Not a directory: '{outpath}'")
