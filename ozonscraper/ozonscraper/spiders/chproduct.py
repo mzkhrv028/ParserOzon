@@ -83,7 +83,7 @@ class CharacteristicProductSpider(scrapy.Spider):
         input_path_data = list(input_path.glob('**/*.json'))
         if not input_path_data:
             raise FileNotFoundError(f'directory is empty: {input_path}')
-        return sorted(input_path_data)[0]
+        return sorted(input_path_data)[-1]
 
     @staticmethod
     def check_correct_category(category: str) -> str:
